@@ -1,0 +1,158 @@
+@import 'nib'
+@import './public/stylesheets/variable.styl'
+
+
+// 头像显示
+.photo
+  border 1px solid #ddd
+  border-radius 5px
+  overflow hidden
+  &-round
+    border-radius 5px  
+    border @border
+    overflow hidden 
+    border-radius 50%
+  &-big
+    width 150px
+    height 150px
+  
+
+// topic
+.topic 
+  &-title
+    height 2em 
+    overflow hidden
+  &-item
+    height 50px
+    padding .5em 1em
+    .photo-round
+      width @height
+      height @height
+  &-deleted
+    color #999
+    text-decoration line-through
+    a 
+      color @color
+  
+    
+// 内容页
+.content
+  &-hd
+    background-color #f5f5f5
+    border-radius top 5px
+    padding 1em .5em
+    border-bottom 1px solid #eee
+    .info
+      font-size .9em
+      margin-top .5em
+      color #555
+  
+// 用户信息显示
+.user-info 
+  &-info 
+    color #555
+// 回复
+.reply
+  #editor
+    height 210px
+  .CodeMirror
+    height 160px
+  &-list
+    list-style none
+    padding-left 0
+    margin 0
+    li
+      border-bottom 1px solid #eee
+      margin-bottom .5em
+      padding-bottom .5em
+      position relative
+      &:last-child
+        border-bottom none
+      .href
+        position absolute
+        top -10px
+      .date
+        color #999
+        font-weight normal
+      p
+        margin .5em
+        
+.user-action 
+  float right 
+  a 
+    color #888
+    &:hover
+      color $main_color
+
+// 首页
+.index
+  .nav 
+    font-size .9em
+    height 100%
+    a
+      display inline-block
+      padding 0 .5em
+      margin 0 2px 
+      color $main_color
+      &:hover
+      &.active
+        height 38px
+        border-bottom 2px solid @color 
+  .panel-bd
+    padding 0 0 1em 0
+    min-height 500px
+
+
+// 用户首页
+.reply
+  &-content
+    padding-left 1em
+    font-size .9em
+    color #444
+
+// 用户信息设置
+// 设置头像
+.set-avatar
+  &-photo
+  &-from 
+    display inline-block
+    vertical-align bottom
+// 排行榜列表
+.score-list
+  line-height 30px
+// 面包屑
+.wp-breadcrumb
+  padding .5em 
+
+// 搜索框
+.search 
+  display inline-block
+  margin-left 2em
+  position relative
+  &-label
+    position absolute
+    z-index 11
+    left 5px
+    top .5em
+    color #999
+  &-text
+    position relative
+    z-index 10
+    left 0
+    background-color lighten($header_bg, 8)
+    border 1px solid darken($header_bg, 3)
+    border-radius 5px
+    padding .3em .3em .3em 1.5em 
+    &:focus
+      border 2px solid lighten($header_bg, 5)
+      background-color lighten($header_bg, 20)
+    @media screen and (max-width:320px)
+      & 
+        width 5em
+
+
+// 用户消息
+.message
+  &-noread 
+    background-color #ccc
+

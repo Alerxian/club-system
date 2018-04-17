@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  .wp-right
+    - if(current_user)
+      != partial('./sidebar/user_info', {user : current_user})
+      include ./sidebar/create_topic
+    include ./sidebar/score-rank
+      
+  .wp-left
+    .panel.index
+      .panel-hd 
+        div.nav
+          a(href="/" class= current_tag === 'all' ? 'active': '') 全部
+          each tag in tags
+            a(href=`/?tag=${tag}` class= current_tag === tag ? 'active': '')= tag
+             
+      .panel-bd
+        ul.list.list-striped
+          include ./mixin/label
+          each topic in topics
+            li.topic-item
+              a.photo-round.float-l.interval-r(href="/user/" + topic.author.username): img(src=topic.author.avatar_url, alt=topic.author.username width="50" height="50")
+              .float-r.text-muted #{topic.reply_count} / #{topic.visit_count}
+              .topic-title
+                +label(topic)
+                a(href=`/topic/${topic._id}` title=topic.title)= topic.title
+              if topic.reply 
+                span.small 最后由 #{topic.reply.author.username} 回复于 #{getTimeAgo(topic.last_reply_at)} 
+              else
+                span.small 由 #{topic.author.username} 发表于 #{getTimeAgo(topic.create_time)}
+        - var pageBaseUrl = `/?tag=${current_tag}`;
+        include ./includes/page

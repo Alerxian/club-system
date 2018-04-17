@@ -1,0 +1,9 @@
+
+extends ../layout
+
+block content
+  .wp-right
+    != partial('./sidebar/user_info', {user : user})
+  .wp-left
+    include ../mixin/user-home
+    block panel

@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'icomoonFont';
+  src:  url('fonts/icomoon.eot?medi24');
+  src:  url('fonts/icomoon.eot?medi24#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?medi24') format('truetype'),
+    url('fonts/icomoon.woff?medi24') format('woff'),
+    url('fonts/icomoon.svg?medi24#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ico-"], [class*=" ico-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoonFont' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ico-edit:before {
+  content: "\e901"; 
+}
+.ico-home:before {
+  content: "\e904";
+}
+.ico-profile:before {
+  content: "\e926";
+}
+.ico-tag:before {
+  content: "\e938";
+}
+.ico-email:before {
+  content: "\e948";
+}
+.ico-calendar:before {
+  content: "\e956";
+}
+.ico-reply:before {
+  content: "\e971";
+}
+.ico-user:before {
+  content: "\e978";
+}
+.ico-list:before {
+  content: "\e9ba";
+}
+.ico-github:before {
+  content: "\eab0";
+}
+.ico-undo:before {
+  content: "\e969";
+}
+.ico-users:before {
+  content: "\e974";
+}
+.ico-image:before {
+  content: "\e910";
+}
+.ico-key:before {
+  content: "\e98f"; 
+}
+.ico-bars:before {
+  content: "\f0c9"; 
+}
+.ico-trash:before {
+  content: "\f014";
+}
+.ico-up:before {
+  content: "\f087";
+}
+.ico-search:before {
+  content: "\f002";
+}
