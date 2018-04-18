@@ -25,7 +25,7 @@ const tools = require('./common/tools');
 const VIEWSDIR = __dirname + '/views';
 
 let assets = {};
-app.keys = ['easyclub'];
+app.keys = ['club-system-zs'];
 
 onerror(app);
 
