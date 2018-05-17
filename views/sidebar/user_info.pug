@@ -9,10 +9,15 @@
         a(href=`/user/${user.username}`)= user.username
         - if(user.isAdmin)
           small.text-muted  (管理员)
+      if current_user && user && (current_user.username !== user.username) 
+        .float-r 
+          a.btn.btn-primary.interval-r#follow(href=`/user/${user.username}/follow` data-loading="提交中……")= is_follow ? '取消关注' : '关注'
       p 积分：#{user.score}
       p 话题：
         a(href=`/user/${user.username}/topic`)= user.topic_count
       //- p 回复：
       //-   a(href=`/user/${user.username}/reply`)= user.reply_count
-    p= user.signature
+    p.text-muted= user.signature
+
+
         

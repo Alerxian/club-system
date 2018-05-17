@@ -23,7 +23,10 @@ a
     text-decoration none 
   &:hover
     color $main_color
-  
+
+.right
+  float right
+
 img
   vertical-align top
 ul
@@ -190,7 +193,7 @@ button[disabled]
   li
     display inline-block
     border 1px solid #ddd
-    border-right none
+    padding-left 10px
     color #555
     font-size 14px
     &>a 
@@ -277,7 +280,7 @@ btn-style($color, $text_color = #fff)
     overflow hidden
   &-right
     float right
-    width 300px
+    width 300px 
   @media screen and (max-width:960px)
     &-right
       width 200px
@@ -304,7 +307,7 @@ btn-style($color, $text_color = #fff)
     line-height @height
     color #fff
     img 
-      margin-top 10px
+      margin-top 6px
 // 导航菜单
 .nav
   &-btn 
@@ -458,3 +461,8 @@ btn-style($color, $text_color = #fff)
     &:first-child:before 
       display none
 
+
+
+// 管理后台界面
+.admin_login
+  width 400px

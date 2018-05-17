@@ -1,8 +1,7 @@
 
 
-
 mixin form-group(inputType, label, name, value, isRequired, isDisabled)
-  .form-group
+  .form-group.row
     label.control-label(for=name)= label + '：'
     if inputType == 'textarea'
       textarea.form-control(name=name id=name disabled=isDisabled)= value
@@ -11,7 +10,12 @@ mixin form-group(inputType, label, name, value, isRequired, isDisabled)
     if isRequired
       span.control-help.text-error  *
 
+mixin form-btn1(type, btnType, id, label, attr)
+  .form-group(style="margin:40px 0 0 90px;")
+    label.control-label
+    button.btn(type=btnType id=id class=type && `btn-${type}`)&attributes(attr)= label
+    a.github(href='/github/login',title='github登录'): img(src="../../public/images/Github.png")
 mixin form-btn(type, btnType, id, label, attr)
-  .form-group
+  .form-group(style="margin:40px 0 0 90px;")
     label.control-label
     button.btn(type=btnType id=id class=type && `btn-${type}`)&attributes(attr)= label

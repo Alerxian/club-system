@@ -4,4 +4,5 @@
   .panel-bd.user-info
     ul
       each item in topic.author_topic_list
-        li: a(href="/topic/"+ item._id)= item.title
+        - title = item.title.replace(/\s+/g,'')
+        li: a(href="/topic/"+ item._id)= title.length >=20 ? title.slice(0,20)+'...' : title

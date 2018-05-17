@@ -3,7 +3,10 @@ extends ../layout
 
 block content
   .wp-right
-    != partial('./sidebar/user_info', {user : user})
+    - if(user && current_user)
+      != partial('./sidebar/user_info', {user : user, is_follow: is_follow})
+      - if(follow_people)
+        != partial('./sidebar/user_follow', {follow_people: follow_people})
   .wp-left
     include ../mixin/user-home
     block panel

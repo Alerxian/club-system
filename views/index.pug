@@ -5,6 +5,8 @@ block content
     - if(current_user)
       != partial('./sidebar/user_info', {user : current_user})
       include ./sidebar/create_topic
+    - if(topic_none)
+      != partial('./sidebar/topic_none', {topic_none : topic_none})
     include ./sidebar/score-rank
       
   .wp-left
@@ -20,14 +22,18 @@ block content
           include ./mixin/label
           each topic in topics
             li.topic-item
-              a.photo-round.float-l.interval-r(href="/user/" + topic.author.username): img(src=topic.author.avatar_url, alt=topic.author.username width="50" height="50")
-              .float-r.text-muted #{topic.reply_count} / #{topic.visit_count}
+              a.photo-round.float-l.interval-r(href="/user/" + topic.author.username): img(src=topic.author.avatar_url, alt=topic.author.username width="60" height="60")
+              .float-r.text-muted #{topic.reply_count}回复 / #{topic.visit_count}浏览 
               .topic-title
                 +label(topic)
-                a(href=`/topic/${topic._id}` title=topic.title)= topic.title
+                if(topic.title.length >= 50)
+                  - topic.title = topic.title.slice(0,50) + '...'
+                a(href=`/topic/${topic._id}` style="font-weight:600;" title=topic.title.replace(/\n+/,''))= topic.title
+              .topic-content.text-muted
+                != md.render(topic.abstract+'...')
               if topic.reply 
-                span.small 最后由 #{topic.reply.author.username} 回复于 #{getTimeAgo(topic.last_reply_at)} 
+                span.small.reply_small 最后由 #{topic.reply.author.username} 回复于 #{getTimeAgo(topic.last_reply_at)} 
               else
-                span.small 由 #{topic.author.username} 发表于 #{getTimeAgo(topic.create_time)}
+                span.small.reply_small 由 #{topic.author.username} 发表于 #{getTimeAgo(topic.create_time)}     
         - var pageBaseUrl = `/?tag=${current_tag}`;
         include ./includes/page

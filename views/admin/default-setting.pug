@@ -1,0 +1,103 @@
+extends layouts/_layout.pug
+include ../mixin/form-group
+block variables
+  - var activePage = 'setting-default'
+  - var activeGroup = 'setting'
+
+
+block content
+  .app-title
+    div
+      h1
+        i.fa.fa-cog
+        |  系统配置
+      p 修改系统默认配置
+    ul.app-breadcrumb.breadcrumb
+      li.breadcrumb-item
+        i.fa.fa-cog.fa-lg
+      li.breadcrumb-item 系统配置
+      li.breadcrumb-item
+        a(href="/admin/setting/default") 默认配置
+
+  .row(style="background:#fff;padding:20px;")
+    .col-md-12
+      form.form-horizontal#form_default(action="/admin/setting/default" method="post")
+        .form-group.row
+          label.control-label.col-md-3 站点名称:
+          .col-md-8
+            input.form-control(type="text", value=config.sitename, name="sitename",id="sitename" placeholder="请输入站点名称:")
+
+        .form-group.row
+          label.control-label.col-md-3 站点描述:
+          .col-md-8
+            input.form-control(type="text", value=config.describute, name="describute",id="describute" placeholder="请输入站点描述:")
+
+        .form-group.row
+          label.control-label.col-md-3 站点关键词:
+          .col-md-8
+            input.form-control(type="text", value=config.abstract, name="abstract",id="abstract" placeholder="请输入站点关键词:")
+        .form-group.row
+          label.control-label.col-md-3 话题积分设置:
+          .col-md-8
+            select.form-control#topic_score(value=config.score.topic)
+              option(value="1") 1
+              option(value="5", selected) 5
+              option(value="10") 10
+              option(value="20") 20
+        .form-group.row
+          label.control-label.col-md-3 评论积分设置:
+          .col-md-8
+            select.form-control#rely_score(value=config.score.reply)
+              option(value="1", selected) 1
+              option(value="2") 2
+              option(value="3") 3
+              option(value="5") 5
+        .form-group.row
+          label.control-label.col-md-3 MongoDBPath:
+          .col-md-8
+            input.form-control(type="text", value=config.mongodb.host+':'+config.mongodb.port, name="mongodb", id="mongodb" placeholder="请输入站点关键词:")
+        .row
+            .col-md-8(style="margin-left:300px;")
+              input.btn.btn-primary#submit(type="submit", vlaue="保存" style="width:80px;height:40px;font-weight:300;")
+              input.btn.btn-default#reset(type="reset", value="重置" style="color:#000;height:40px;width:70px;font-weight:300;")
+
+
+block specific-js
+  script.
+    $(function() {
+      var sitename = $('#sitename').val();
+      var describute = $('#describute').val();
+      var abstract = $('#abstract').val();
+      var topic_score = $('#topic_score').val();
+      var reply_score = $('#reply_score').val();
+      var mongodb = $('#mongodb').val();
+      var submit = $('#submit');
+      var reset = $('#reset');
+      submit.click(function(e){
+        e.preventDefault();
+        $.ajax({
+          type:'POST',
+          url: $('#form_default').attr('action'),
+          dataType: 'json',
+          data: {
+            sitename: sitename,
+            describute: describute,
+            abstract: abstract,
+            topic_score: topic_score,
+            reply_score: reply_score,
+            mongodb: mongodb
+          },
+          success: function(result) {
+            console.log(result);
+            location.reload();
+         }
+        });
+      });
+      reset.click(function(e){
+       e.preventDefault();
+       location.reload();
+      });
+    });
+
+
+        

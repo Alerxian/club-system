@@ -1,0 +1,78 @@
+extends ../layout1
+include ../mixin/form-group
+block content
+  .wp-left(style="margin:100px 200px 100px 200px;")
+    .panel
+      .panel-hd(style="text-align:center;background-color:#337AB7;color:#fff;") 管理员登录
+      .panel-bd.register
+        form.form.form-horizontal(action="/user/login" method="POST" style="margin-left:120px;")
+          #passAlert.alert.alert-error.hide
+          +form-group('text', '用户名', 'username', null, true)
+          +form-group('password', '密　码', 'password', null, true)
+          +form-btn('primary','submit', 'btn', '登录')
+            
+block script
+  script
+    :uglify
+      $(function () {
+        var username = $('#username');
+        var password = $('#password');
+        var error = $('#passAlert');
+        var btn = $('#btn');
+        $('form').submit(function (event) {
+          event.preventDefault();
+          var user = $.trim(username.val());
+          var userlen = user.length;
+          if(userlen == 0){
+            error.text('用户名不能为空').show();
+            return false;
+          }
+          var pass = $.trim(password.val());
+          var passlen = pass.length;
+          if(passlen == 0){
+            error.text('密码不能为空').show();
+            return false;          
+          }
+          
+          btn.attr('disabled', true);
+          $.ajax({
+            url: '/admin/login',
+            type: 'POST',
+            dataType: 'json',
+            data:  {
+              password: pass,
+              username: user
+            },
+            complete: function () {
+              btn.attr('disabled', false);
+            },
+            success: function (data) {
+              if(data.status != 0)
+                error.text(data.message).show();
+              else 
+                location.href = '/admin/index';
+            }
+          });
+          
+        });
+      });
+    
+          
+  
+<!--form.forget-form(action="index.html")
+          h3.login-head
+            i.fa.fa-lg.fa-fw.fa-lock
+            | Forgot Password ?
+          .form-group
+            label.control-label EMAIL
+            input.form-control(type="text", placeholder="Email")
+
+          .form-group.btn-container
+            button.btn.btn-primary.btn-block
+              i.fa.fa-unlock.fa-lg.fa-fw
+              | RESET
+
+          .form-group.mt-3
+            p.semibold-text.mb-0
+              a(href="#" data-toggle="flip") <i class="fa fa-angle-left fa-fw"></i> Back to Login
+        -->

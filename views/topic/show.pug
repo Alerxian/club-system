@@ -5,7 +5,7 @@ block css
 
 block content
   .wp-right
-    != partial('./sidebar/user_info', {user : topic.author, title: '作者信息'})
+    != partial('./sidebar/user_info', {user : topic.author,is_follow: is_follow, title: '作者信息'})
     include ../sidebar/user_topic_list
   .wp-left
     .wp-breadcrumb
@@ -22,7 +22,9 @@ block content
           .float-r 
             a.btn.btn-primary.interval-r#top(href=`/topic/${topic._id}/top` data-loading="提交中……")= topic.top ? '取消置顶' : '置顶'
             a.btn.btn-danger#del(href=`/topic/${topic._id}/delete`  data-loading="提交中……")= topic.deleted ? '恢复' : '删除'
-
+        if current_user && current_user.username !== topic.author.username
+          .float-r
+            a.btn.btn-primary.interval-r#collect(href=`/topic/${topic._id}/collect` data-loading="提交中……")= topic.collect && topic.collect.is_collected ? '取消收藏' : '收藏'
         .info
           a.interval-r(href="/?tag=" + topic.tag) <span class="icon ico-tag"></span> #{topic.tag}
           a.interval-r.author(href="/user/" + topic.author.username) <span class="icon ico-user"></span> #{topic.author.username}
@@ -45,7 +47,12 @@ block content
                   if current_user && (current_user.isAdmin || current_user.username === reply.author.username)
                     a.interval-r.del-reply-btn(href=`/reply/${reply._id}/delete` title="删除回复"): span.ico-trash
                     a(href=`/reply/${reply._id}/edit`  title="编辑回复"): span.ico-edit
+                  a.interval-l.putup-user(href=`/reply/${reply._id}/putup?num=0`  data-user=reply.author.username title="点赞"): span.ico-up 
+                    span #{reply.like_count}
+                  a.interval-l.putdown-user(href=`/reply/${reply._id}/putup?num=1` data-user=reply.author.username title="踩"): span.ico-down 
+                    span #{reply.dislike_count}
                   a.interval-l.reply-user(href="#" data-user=reply.author.username title="回复"): span.ico-undo
+
                 .user-info.small
                   a.reply-name(href=`/user/${reply.author.username}` target="_blank")= reply.author.username 
                   span.date= " • at: " + getTimeAgo(reply.create_time)
@@ -155,7 +162,23 @@ block script
               $(_this).text('置顶');
             }
           })
-        })
+        });
+
+        // 收藏
+        $('#collect').click(function (e) {
+          e.preventDefault();
+          var _this = this;
+          $.get(this.href, function (result) {
+            if(result.status) {
+              return alert(result.message);
+            }
+            if(result.is_collected) {
+              $(_this).text('取消收藏');
+            } else {
+              $(_this).text('收藏');
+            }
+          })
+        });
 
         // 删除帖子
         $('#del').click(function (e) {
@@ -188,7 +211,44 @@ block script
             }
           })
         })
-        
+
+        function putUp (target) {
+          var target = $(target)
+          target.on('click', function(e){
+            e.preventDefault();
+            $.get(target.attr('href'), function(result) {
+              if(result.status) {
+                return alert(result.message);
+              } 
+
+              if(result.num === 0) {
+                if(result.is_calcel){
+                  $('.putup-user').css({color:'#888'}).find('span span').html(result.like_count);
+                  $('.putdown-user').css({color:'#000'}).find('span span').html(result.unlike_count);
+
+                }else {
+                  $('.putup-user').css({color:'#000'}).find('span span').html(result.like_count);
+                  $('.putdown-user').css({color:'#888'}).find('span span').html(result.unlike_count);
+                }
+              }else {
+                if(result.is_cancel){
+                  $('.putdown-user').css({color:'#000'}).find('span span').html(result.unlike_count);
+                  $('.putup-user').css({color:'#888'}).find('span span').html(result.like_count);
+                }else {
+                  $('.putdown-user').css({color:'#888'}).find('span span').html(result.unlike_count);
+                   $('.putup-user').css({color:'#000'}).find('span span').html(result.like_count);
+
+                }
+              }
+            });
+          })
+          
+        }
+
+        //点赞或踩
+        putUp('.putup-user');
+        putUp('.putdown-user');
+
         var $btn = $('.btn');
         var $alert = $('#alert');
         // 回复话题

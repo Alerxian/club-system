@@ -8,7 +8,7 @@ const sign = require('../middlewares/sign');
 const at = require('../common/at');
 
 //发表主题页面
-router.get('/create', async (ctx, next) => {
+router.get('/create', sign.isLogin, async (ctx, next) => {
   await ctx.render('topic/edit', {
     title: '发表话题',
     tags: config.tags
@@ -16,11 +16,11 @@ router.get('/create', async (ctx, next) => {
 });
 
 // 发表主题
-router.post('/', async (ctx, next) => {
+router.post('/',sign.isLogin, async (ctx, next) => {
   let body = tools.trimObjectValue(ctx.request.body);
 
   if (!body.title || !body.tag || !body.content) {
-    return ctx.error('您请求的参数不完整!');
+    return ctx.error('您请求的参数不完整！');
   }
   // 获取用户id
   let user_id = ctx.state.current_user._id;
@@ -55,8 +55,8 @@ router.get('/:topic_id', async (ctx, next) => {
   let topic = await Topic.get_topic(topic_id);
   let isAdmin = ctx.state.current_user && ctx.state.current_user.isAdmin;
   if (!topic || (!isAdmin && topic.deleted)) {
-    return ctx.error('您要查看的文章不存在或已删除!', {
-      jump: '-1'
+    return ctx.error('您要查看的文章不存在或已删除！', {
+      jump: '/'
     });
   }
 
@@ -89,14 +89,57 @@ router.get('/:topic_id', async (ctx, next) => {
       limit: 10
     })
   ]);
-
+  //是否收藏
+  let Collect = ctx.model('collect');
+  let collect = await Collect.findOneQ({
+    topic_id:topic_id
+  });
+  topic.collect = collect;
+  let current_user = ctx.state.current_user;
+  let is_follow = current_user && current_user.follow_people.indexOf(String(topic.author_id)) > -1;
   await ctx.render('topic/show', {
     title: topic.title,
     topic: topic,
     replys: replys,
+    is_follow: is_follow,
     md: md
   });
 });
+
+//收藏帖子
+router.get('/:topic_id/collect',sign.isLogin, async (ctx, next) => {
+  let topic_id = ctx.params.topic_id;
+  let user = ctx.state.current_user;
+  let Topic = ctx.model('topic');
+  let Collect = ctx.model('collect');
+  let collect = await Collect.findOneQ({
+    topic_id: topic_id,
+    author_id: user._id
+  });
+
+  if(!collect){
+    let _collect = new Collect({
+      topic_id: topic_id,
+      author_id: ctx.state.current_user._id,
+      is_collected: true
+    });
+    let result = await _collect.saveQ();
+    if(result) {
+      return ctx.success({
+        is_collected: true
+      });
+    }
+  }
+  collect.is_collected = !collect.is_collected;
+  let result_collect = await collect.saveQ();
+  if(result_collect) {
+    return ctx.success({
+      is_collected: collect.is_collected
+    });
+  }
+
+});
+
 
 //编辑主题页面
 router.get('/:topic_id/edit', sign.isLogin, async (ctx, next) => {
@@ -118,7 +161,7 @@ router.get('/:topic_id/edit', sign.isLogin, async (ctx, next) => {
     return ctx.error('您要编辑的话题不存在或已删除!');
   }
   if (!(ctx.session.user.isAdmin || ctx.session.user._id.toString() === topic.author_id.toString())) {
-    return ctx.error('您没有权限编辑此话题!');
+    return ctx.error('您没有权限编辑此话题！');
   }
 
   await ctx.render('topic/edit', {
@@ -140,10 +183,10 @@ router.post('/:topic_id/edit', sign.isLogin, async (ctx, next) => {
     return ctx.error('您要编辑的话题不存在或已删除!');
   }
   if (!(ctx.session.user.isAdmin || ctx.session.user._id.toString() === topic.author_id.toString())) {
-    return ctx.error('您没有权限编辑此话题!');
+    return ctx.error('您没有权限编辑此话题');
   }
   let body = tools.trimObjectValue(ctx.request.body);
-  if (!body.title || !body.content || !body.tag) return ctx.errro('您请求的参数不完整!');
+  if (!body.title || !body.content || !body.tag) return ctx.error('您请求的参数不完整！');
 
   topic.title = body.title;
   topic.content = body.content;
@@ -171,16 +214,16 @@ router.post('/:topic_id/reply', sign.isLogin, async (ctx, next) => {
 
   let topic_id = ctx.params.topic_id;
   if (!validator.isMongoId(topic_id)) {
-    return ctx.error('您请求的参数有误，请检查后再试!');
+    return ctx.error('您请求的参数有误，请检查后重试！');
   }
-  let content = tools.trimObjectValue(ctx.request.body).content;
+
+  let content = ctx.request.body.content;
   if (!content) {
-    ctx.error('您尚未填写评论!请检查后再试');
+    return ctx.error('您尚未填写评论!请检查后再试');
   }
 
   let Reply = ctx.model('reply');
   let user_id = ctx.state.current_user._id;
-
   let reply = new Reply({
     content: content,
     author_id: user_id,
@@ -216,8 +259,9 @@ router.get('/:topic_id/top', sign.isAdmin, async (ctx, next) => {
   let Topic = ctx.model('topic');
   let topic = await Topic.findById(topic_id);
   topic.top = !topic.top;
-  let result = topic.saveQ();
+  let result = await topic.saveQ();
   if (result) {
+    // let msg = topic.top ? '置顶帖子成功！' : '取消置顶成功！'
     ctx.success({
       top: topic.top
     });
@@ -236,7 +280,7 @@ router.get('/:topic_id/delete', sign.isAdmin, async (ctx, next) => {
   let Topic = ctx.model('topic');
   let topic = await Topic.findById(topic_id);
   if(!topic) {
-    return ctx.error('该话题不存在!');
+    return ctx.error('您要查看的文章不存在或已删除！');
   }
   topic.deleted = !topic.deleted;
   await topic.saveQ();
@@ -263,5 +307,7 @@ router.get('/:topic_id/delete', sign.isAdmin, async (ctx, next) => {
       deleted: false
     });
   }
-})
+});
+
+
 module.exports = router;

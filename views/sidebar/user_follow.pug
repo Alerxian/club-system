@@ -1,0 +1,11 @@
+.panel
+  .panel-hd <span class="ico-users"></span> 所关注的人
+  .panel-bd.list-bd.clearfix
+    ol.list.score-list
+      each user in follow_people
+        li
+          span.float-r= user.username
+          a.photo.float-l.interval-r(href="/user/" + user.username)
+            img(src=user.avatar_url alt=user.username width="30" height="30")
+          a(href="/user/" + user.username)= user.username
+          

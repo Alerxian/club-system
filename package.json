@@ -8,7 +8,7 @@
     "koa": "node bin/www",
     "pm2": "NODE_ENV=production pm2 start bin/www ",
     "test": "make test",
-    "build": "make build"
+    "build": "node ./bin/build ./views ."
   },
   "dependencies": {
     "busboy": "^0.2.13",

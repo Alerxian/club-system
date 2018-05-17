@@ -58,7 +58,7 @@ describe('Reply ', () => {
       request
         .ajax('post','/topic/' + topic._id + '/reply')
         .set('Cookie', replyCookie)
-        .expect(200, shouldError('您请求的参数有误，请检查后重试！', done));
+        .expect(200, shouldError('您尚未填写评论!请检查后再试', done));
     });
 
     it('#reply the topic', (done) => {

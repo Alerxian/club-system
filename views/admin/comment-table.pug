@@ -1,0 +1,168 @@
+extends layouts/_layout.pug
+
+block variables
+  - var activePage = 'sys-comment'
+  - var activeGroup = 'sys-users'
+
+block content
+  .app-title
+    div
+      h1
+        i.fa.fa-users
+        |  用户管理页
+
+    ul.app-breadcrumb.breadcrumb
+      li.breadcrumb-item
+        i.fa.fa-home.fa-lg
+      li.breadcrumb-item 系统管理
+      li.breadcrumb-item
+        a(href="/admin/comment") 评论管理
+  .row
+    .col-md-12
+      .tile
+        .tile-body
+          table.table.table-hover.table-bordered#table_user
+            thead
+              tr
+                td
+                    div.checkbox
+                      label.form-check-label: input(type="checkbox")
+                th 评论作者
+                th 评论内容
+                th 所属文章
+                th 是否已删除
+                th 操作
+            tbody
+              - if(comments.length)
+                each comment in comments
+                  tr
+                    td
+                      div.checkbox
+                        label.form-check-label: input(type="checkbox") 
+                    td= comment.author.username
+                    td
+                      - if(comment.abstract.length >= 50)
+                        - comment.abstract = comment.abstract.slice(0,50)+'...'
+                      span(id=comment._id)
+                        != md.render(comment.abstract)
+                    td
+                      if(comment.topic.title.length >= 20)
+                        - comment.topic.title = comment.topic.title.slice(0,20) + '...'
+                      a(href=`/admin/topic/${comment.topic._id}`  title=comment.topic.title.replace(/\n+/,''))= comment.topic.title
+                    td  
+                      - if(comment.deleted) 
+                        i.fa.fa-check-circle(style="color:red;")
+                      -else 
+                        i.fa.fa-check-circle(style="color:rgb(19, 206, 102);")
+                    td 
+                      .ico-click(style="font-size:16px;") 
+                        span.span_round: i.ico-trash.ico_red
+          nav#user_page
+            .page_title= '共有'+count+'条数据'
+            ul.pagination(style="min-width:300px;margin:0 auto;")
+              li.page-link: a(href=page.start < page.current ? `?page=${page.current - 1}` : 'javascript:;') 上一页
+              - for (var i = page.start; i <= page.end; i++)
+                  - if (page.current == i)
+                    li.page-link: span= i
+                  - else
+                    li.page-link: a(href=`?page=${i}`)= i
+              li.page-link: a(href= page.end > page.current ? `?page=${page.current + 1}` : 'javascript:;') 下一页
+
+  .bs-component(style="font-size:16px;")
+    .modal.fade#myModal(style="bottom:100px;")
+      .modal-dialog(role='document')
+        .modal-content()
+          .modal-header
+            h5.modal-title 编辑评论信息
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            form#form_info.form-horizontal(action="/admin/comment/edit" method="post")
+              .form-group.row
+                label.control-label.col-md-3 评论人
+                .col-md-8
+                  input.form-control(type="text", name="username", id="username",  value="" placeholder="请输入用户名：")
+
+              .form-group.row
+                label.control-label.col-md-3 评论内容
+                .col-md-8
+                  textarea.form-control(rows="4", name='content', id="comment_content" value="" placeholder="个性签名")
+          .modal-footer
+            button.btn.btn-primary#modifyComment(type='button') 保存
+            button.btn.btn-danger(type='button', data-dismiss='modal') 关闭
+block specific-js
+  //- script(type='text/javascript', src="/public/javascripts/plugins/jquery.dataTables.min.js")
+  //- script(type='text/javascript', src="/public/javascripts/plugins/dataTables.bootstrap.min.js")
+  script(type='text/javascript').
+    //- $('#table_user').DataTable();
+    $('#table_user').on('click', function(e) {
+      var target = e.target;
+      var curRow;
+      if(target.tagName.toLowerCase() == 'table'){
+          return;
+      }
+      while(target.tagName.toLowerCase() !== 'tr') {
+        curRow = target.parentElement;
+        target = curRow;
+      }
+
+      var select_tr = $('#table_user  tr')[+curRow.rowIndex];
+      var username = $(select_tr).children('td').eq(1).text();
+      var content = $(select_tr).children('td').eq(2).text();
+      target = e.originalEvent.target;
+      console.log(target);
+      if(target.className == 'span_round') {
+        target = target.children[0];
+      }
+      //编辑
+      if(target.className == 'ico-edit ico_blue'){
+        //获取数据
+        $('#myModal').find('#username').val(username);
+        $('#comment_content').val(content);
+        $('#myModal').modal();
+        $('#modifyUser').click(function(e) {
+          get_modify(e, select_tr);
+        });
+      }
+      if(target.className == 'ico-trash ico_red') {
+        //删除数据
+        var _id = $(select_tr).children().eq(2).find('span').attr('id');
+        console.log(_id)
+        if (!confirm('您确定要删除该评论吗?')){
+          return false;
+        }
+        $.get(`/admin/comment/delete?reply_id=${_id}`, function(result){
+          console.log(result);
+          if(result.success) {
+            location.href = '/admin/comment/#'+_id;
+          }else if(result.error) {
+            console.log(result.error);
+          }
+        });
+      }
+    });
+
+    function get_modify(e,elem) {
+      var username = $('#username').val();
+      var content = $('#comment_content').val();
+      $.ajax({
+        type:'POST',
+        url: $('#form_info').attr('action'),
+        dataType: 'json',
+        data: {
+          username: username,
+          content: content
+        },
+        complete: function() {
+          $('#myModal').modal('hide');
+        },
+        success: function(data) {
+          if(typeof(data) == "string") {
+            console.log(data)
+          }else {
+            $(elem).children('td').eq(1).text(data.username);
+            $(elem).children('td').eq(3).text(data.content);
+          }
+        }
+      });
+    }

@@ -8,9 +8,17 @@ block content
       .panel-bd.register
         form.form.form-horizontal(action="/user/register" method="POST")
           #error.alert.alert-error.hide
-          +form-group('text', '用户名', 'username', null, true)
-          +form-group('password', '密　码', 'password', null, true)
-          +form-group('email', '邮　箱', 'email', null, true)
+          - if(user_info)
+            +form-group('text', '用户名', 'username', user_info.username, true)
+            +form-group('password', '密　码', 'password', null, true)
+            +form-group('email', '邮　箱', 'email', user_info.email, true)
+            input(type="hidden", name="access_token", id="token", value=user_info.access_token, disabled=true)
+            input(type="hidden", name="openid", id="openid" value=user_info.openid, disabled=true)
+            input(type="hidden", name="avatar", id="avatar" value=user_info.avatar_url, disabled=true)
+          - else
+            +form-group('text', '用户名', 'username', null, true)
+            +form-group('password', '密　码', 'password', null, true)
+            +form-group('email', '邮　箱', 'email', null, true)
           +form-btn('primary', 'submit', 'btn' ,'注册')  
             
 block script
@@ -20,6 +28,9 @@ block script
         var username = $('#username');
         var password = $('#password');
         var email = $('#email');
+        var access_token = $('#token').val();
+        var openid = $('#openid').val();
+        var avatar = $('#avatar').val();
         var error = $('#error');
         var btn = $('.btn');
         $('form').submit(function (event) {
@@ -63,7 +74,10 @@ block script
             data:  {
               password: pass,
               username: user,
-              email: emailStr
+              email: emailStr,
+              access_token: access_token,
+              openid: openid,
+              avatar: avatar
             },
             complete: function () {
               btn.attr('disabled', false);
@@ -72,7 +86,10 @@ block script
               if(data.status != 0) {
                 error.text(data.message).show();
                 return false;
-              } else {
+              } else if(data.is_third) {
+                alert('登录成功！');
+                location.href = '/';
+              } else{
                 alert('注册成功，请登录！');
                 location.href = '/user/login';
               }

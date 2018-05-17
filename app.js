@@ -19,8 +19,9 @@ const index = require('./routes/index');
 const user = require('./routes/user');
 const topic = require('./routes/topic');
 const reply = require('./routes/reply');
+const oauth = require('./routes/oauth');
 const tools = require('./common/tools');
-
+const _admin = require('./routes/admin');
 
 const VIEWSDIR = __dirname + '/views';
 
@@ -52,7 +53,8 @@ if (config.debug) {
     throw e;
   }
 }
-
+// const catchError = require('./middlewares/catchError').catchError;
+// app.use(catchError);   //处理错误404
 // middlewares
 app.use(convert(require('koa-static2')("/public", __dirname + '/public')));
 app.use(convert(bodyparser));
@@ -144,8 +146,9 @@ router.use('/', index.routes(), index.allowedMethods());
 router.use('/user', user.routes(), user.allowedMethods());
 router.use('/topic', topic.routes(), topic.allowedMethods());
 router.use('/reply', reply.routes(), topic.allowedMethods());
+router.use('/github', oauth.routes(), oauth.allowedMethods());
+router.use('/admin', _admin.routes(), oauth.allowedMethods());
 app.use(router.routes(), router.allowedMethods());
-
 // response
 app.on('error', function (err, ctx) {
   console.error(err);

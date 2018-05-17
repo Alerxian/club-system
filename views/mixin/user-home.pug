@@ -5,7 +5,12 @@ mixin topic(topic)
   div
     +label(topic) 
     a(href='/topic/' + topic._id)= topic.title
-
+mixin collect(collect)
+  span.float-r.text-muted= getTimeAgo(collect.create_time)
+  - topic = collect.topic
+  div
+    +label(topic) 
+    a(href='/topic/' + topic._id + '#' + collect._id )= topic.title
 mixin reply(reply) 
   if reply.topic.deleted && !(current_user && current_user.isAdmin)
     .text-delete.text-muted 信息被删除或无权限查看
@@ -21,7 +26,9 @@ mixin reply(reply)
 mixin reply_list(replys)
   each reply in replys
     li: +reply(reply)
-
+mixin collect_list(collects)
+  each collect in collects
+    li: +collect(collect)
 mixin topic_list(topics) 
   each topic in topics
     li: +topic(topic)

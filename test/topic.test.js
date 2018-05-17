@@ -146,7 +146,7 @@ describe('Topic', () => {
       request
         .ajax('post','/topic/' + topic._id + '/edit')
         .set('Cookie', support.getUserCookie(user2))
-        .expect(200, shouldError('您没有权限编辑此话题！', done))
+        .expect(200, shouldError('您没有权限编辑此话题', done))
     });
 
     it('#should error when no title ', (done) => {

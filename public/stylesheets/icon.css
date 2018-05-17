@@ -75,6 +75,59 @@
 .ico-up:before {
   content: "\f087";
 }
+.ico-down:before {
+  content: "\f088";
+}
 .ico-search:before {
   content: "\f002";
+}
+
+.ico_blue{
+    color: #409EFF;
+    position: absolute;
+    top: 5px;
+    left: 6px;
+}
+.span_round:hover .ico_blue{
+  color:#fff;
+}
+#blue_round:hover {
+    background:#409EFF;
+}
+.ico_red {
+  color:#f56c6c;
+  position: absolute;
+  top: 5px;
+  left: 7px;
+}
+.span_round:hover .ico_red{
+  color:#fff;
+}
+.span_round:hover {
+    background:#f56c6c;
+}
+
+.span_round{
+  position:relative;
+  top:6px;
+  width:28px;
+  height:28px;
+  border:1px solid #ccc;
+  border-radius:24px;
+  display:inline-block;
+}
+
+/*添加用户按钮*/
+.add_user {
+  margin:10px;
+}
+.add_user i{
+  float:left;
+  font-size:30px;
+  color:#000;
+  margin-right:10px;
+}
+.add_user i:hover {
+  cursor:pointer;
+  color:#409EFF;
 }

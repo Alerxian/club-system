@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+
+    head
+        meta(name="description", content="nodejs-club")
+        link(rel="shortcut icon" href="/public/images/icon.png" type="image/x-icon")
+        title= '错误页面'
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+
+        // Main CSS
+        link(rel='stylesheet', type='text/css', href='/public/stylesheets//main.css')
+        // Font-icon css
+        link(rel='stylesheet', type='text/css', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    body.app.sidebar-mini.rtl
+
+        .page-error
+            h1
+                i.fa.fa-exclamation-circle
+                |  Error 404: Page not found
+            p The page you have requested is not found.
+            p: a.btn.btn-primary(href="javascript:window.history.back();") 返回
+

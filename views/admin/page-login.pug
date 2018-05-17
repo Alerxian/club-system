@@ -1,0 +1,76 @@
+doctype html
+html
+	head
+		include includes/_head.pug
+		title Login - 后台登录
+
+	body
+		section.material-half-bg
+			.cover
+
+		section.login-content
+			.logo: h1 Club
+
+			.login-box
+				form.login-form(action="/user/login" method="POST")
+					h3.login-head
+						i.fa.fa-lg.fa-fw.fa-user
+						| SIGN IN
+					.form-group
+						label.control-label USERNAME
+						input.form-control(type="text", name="username", id="username" placeholder="用户名", autofocus)
+
+					.form-group
+						label.control-label PASSWORD
+						input.form-control(type="password", name="password", id="password" placeholder="密码")
+
+					.form-group.btn-container
+						button.btn.btn-primary.btn-block#btn
+							i.fa.fa-sign-in.fa-lg.fa-fw
+							| SIGN IN
+
+		include includes/_javascript.pug
+
+		script(type="text/javascript").
+			$(function () {
+			  var username = $('#username');
+			  var password = $('#password');
+			  var error = $('#passAlert');
+			  var btn = $('#btn');
+			  $('form').submit(function (event) {
+			    event.preventDefault();
+			    var user = $.trim(username.val());
+			    var userlen = user.length;
+			    if(userlen == 0){
+			      error.text('用户名不能为空').show();
+			      return false;
+			    }
+			    var pass = $.trim(password.val());
+			    var passlen = pass.length;
+			    if(passlen == 0){
+			      error.text('密码不能为空').show();
+			      return false;          
+			    }
+			    
+			    btn.attr('disabled', true);
+			    $.ajax({
+			      url: '/admin/login',
+			      type: 'POST',
+			      dataType: 'json',
+			      data:  {
+			        password: pass,
+			        username: user
+			      },
+			      complete: function () {
+			        btn.attr('disabled', false);
+			      },
+			      success: function (data) {
+			        if(data.status != 0)
+			          error.text(data.message).show();
+			        else 
+			          location.href = '/admin/index';
+			      }
+			    });
+			    
+			  });
+			});

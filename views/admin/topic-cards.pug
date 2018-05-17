@@ -1,0 +1,48 @@
+extends layouts/_layout.pug
+
+block variables
+  - var activePage = 'sys-topic'
+  - var activeGroup = 'sys-users'
+
+
+block content
+  .app-title
+    div
+      h1
+        i.fa.fa-laptop
+        |  话题管理
+      p 管理用户发表话题
+
+    ul.app-breadcrumb.breadcrumb
+      li.breadcrumb-item
+        i.fa.fa-home.fa-lg
+      li.breadcrumb-item 系统管理
+      li.breadcrumb-item
+        a(href="/admin/topic") 话题管理
+
+  .row
+    .col-md-12
+      - if(topics.length)
+        each topic in topics
+          .tile
+            .tile-title-w-btn
+              h3.title: a(href=`/admin/topic/${topic._id}`)= topic.title
+              .btn-group
+                a.btn.btn-primary(href=`/admin/topic/${topic._id}/edit`): i.fa.fa-lg.fa-edit
+                a.btn.btn-primary(href=`/admin/topic/${topic._id}/delete#${page.current}`): i.fa.fa-lg.fa-trash
+            .tile-body.text-muted
+              != md.render(topic.abstract+'...')
+  nav#user_page
+    .page_title= '共有'+count+'条数据'
+    ul.pagination(style="width:300px;margin:0 auto;")
+      li.page-link: a(href=page.start < page.current ? `?page=${page.current - 1}` : 'javascript:;') 上一页
+      - for (var i = page.start; i <= page.end; i++)
+          - if (page.current == i)
+            li.page-link: span= i
+          - else
+            li.page-link: a(href=`?page=${i}`)= i
+      li.page-link: a(href= page.end > page.current ? `?page=${page.current + 1}` : 'javascript:;') 下一页
+
+
+
+        

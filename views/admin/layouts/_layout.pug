@@ -1,0 +1,44 @@
+doctype html
+html(lang="en")
+
+  //- Variables to set active page in sidebar
+  block variables
+    - var activePage = 'dashboard'
+    - var activeGroup = 'none'
+
+  head
+    meta(name="description", content="nodejs-club")
+    link(rel="shortcut icon" href="/public/images/icon.png" type="image/x-icon")
+    title= title + ' - ' + sitename
+    include ../includes/_head.pug
+    != Loader('/public/stylesheets/common.min.css').css('/public/stylesheets/common.styl').css('/public/stylesheets/icon.css').css('/public/javascripts/lib/editor/editor.css').css('/public/stylesheets/markdown.css').css('/public/javascripts/lib/webuploader/webuploader.css').css('/public/stylesheets/index.styl').css('/public/stylesheets/atwho.css').done(assets,'', !isDebug)
+    block css
+
+  body.app.sidebar-mini.rtl
+
+    // Navbar
+    include ../includes/_header.pug
+
+    // Sidebar menu
+    != partial('./admin/includes/_sidebar.pug', {user : user})
+
+    main.app-content
+      block content
+
+    //- Javascripts
+    include ../includes/_javascript.pug
+    //script(type='text/javascript', src="/public/javascripts/plugins/bootstrap-notify.min.js")
+    //script(type='text/javascript', src="/public/javascripts/plugins/sweetalert.min.js")
+    block specific-js
+
+
+    script(type="text/javascript").
+      
+      if(document.location.hostname == 'pratikborsadiya.in') {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-72504830-1', 'auto');
+        ga('send', 'pageview');
+      }

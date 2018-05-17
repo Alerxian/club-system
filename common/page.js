@@ -50,6 +50,7 @@ async function findPageForQuery (query, field, options, current_page, pageSize, 
   let data = await this.find(query, field, options);
   return {
     data: data,
-    page: pages
+    page: pages,
+    count:count
   }
 }

@@ -8,6 +8,7 @@ const ObjectId = Schema.ObjectId;
 const validator = require('validator');
 const page = require('../common/page');
 const config = require('../config');
+const markdown = require('markdown-it');
 
 let TopicSchema = new Schema({
   title: {
@@ -68,6 +69,21 @@ TopicSchema.index({
 TopicSchema.index({
   author_id: 1,
   create_time: -1
+});
+TopicSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+});
+
+TopicSchema.virtual('abstract').get(function(){
+  let md = new markdown({html: true});
+  let content = md.render(this.content);
+  content = content.replace(/\s+/g,'').replace(/<[^>]+>/ig,'').replace(/&nbsp;|\r|\t/ig, "");
+  if(content.length <= 100){
+    return content;
+  }else{
+    return content.slice(0,100);
+  }
 });
 
 /**

@@ -1,0 +1,113 @@
+.app-sidebar__overlay(data-toggle="sidebar")
+aside.app-sidebar
+
+	.app-sidebar__user
+		- if(user)
+			img.app-sidebar__user-avatar(src= user && user.avatar_url || '/images/photo.png' width="62", alt='用户头像')
+			div
+				p.app-sidebar__user-name= user.username
+				p.app-sidebar__user-designation= user.signature
+		- else
+			img.app-sidebar__user-avatar(src= '/public/images/photo.png' width="62", alt='用户头像')
+			div
+				p.app-sidebar__user-name Club
+				p.app-sidebar__user-designation 个性签名
+
+	ul.app-menu
+		li
+			a.app-menu__item(href='/admin/index' class={'active': activePage == 'dashboard'})
+				i.app-menu__icon.fa.fa-dashboard
+				span.app-menu__label 首页
+
+		li.treeview(class={'is-expanded': activeGroup == 'sys-users'})
+			a.app-menu__item(href='#', data-toggle='treeview')
+				i.app-menu__icon.fa.fa-users
+				span.app-menu__label 系统管理
+				i.treeview-indicator.fa.fa-angle-right
+			ul.treeview-menu#sys_manage
+				li
+					a.treeview-item(href='/admin/user' class={'active': activePage == 'sys-user'})
+						i.icon.fa.fa-circle-o
+						|  用户管理
+				li
+					a.treeview-item(href='/admin/topic' class={'active': activePage == 'sys-topic'})
+						i.icon.fa.fa-circle-o
+						|  话题管理
+				li
+					a.treeview-item(href='/admin/comment' class={'active': activePage == 'sys-comment'})
+						i.icon.fa.fa-circle-o
+						|  评论管理
+				li
+					a.treeview-item(href='/admin/role' class={'active': activePage == 'sys-role'})
+						i.icon.fa.fa-circle-o
+						|  权限管理
+
+		li.treeview(class={'is-expanded': activeGroup == 'setting'})
+			a.app-menu__item(href='#' data-toggle='treeview')
+				i.app-menu__icon.fa.fa-cog 
+				span.app-menu__label 系统配置
+				i.treeview-indicator.fa.fa-angle-right
+			ul.treeview-menu
+				li
+					a.treeview-item(href='/admin/setting/default' class={'active': activePage == 'setting-default'})
+						i.icon.fa.fa-circle-o
+						|  默认配置
+				li
+					a.treeview-item(href='/admin/setting/other' class={'active': activePage == 'setting-other'})
+						i.icon.fa.fa-circle-o
+						|  其他设置
+
+		li.treeview(class={'is-expanded': activeGroup == 'tables'})
+			a.app-menu__item(href='#' data-toggle='treeview')
+				i.app-menu__icon.fa.fa-th-list
+				span.app-menu__label Tables
+				i.treeview-indicator.fa.fa-angle-right
+			ul.treeview-menu
+				li
+					a.treeview-item(href='table-basic.html' class={'active': activePage == 'basic-table'})
+						i.icon.fa.fa-circle-o
+						|  Basic Tables
+				li
+					a.treeview-item(href='table-data-table.html' class={'active': activePage == 'data-table'})
+						i.icon.fa.fa-circle-o
+						|  Data Tables
+
+		li.treeview(class={'is-expanded': activeGroup == 'pages'})
+			a.app-menu__item(href='#' data-toggle='treeview')
+				i.app-menu__icon.fa.fa-file-text
+				span.app-menu__label Pages
+				i.treeview-indicator.fa.fa-angle-right
+			ul.treeview-menu
+				li
+					a.treeview-item(href='blank-page.html' class={'active': activePage == 'blank-page'})
+						i.icon.fa.fa-circle-o
+						|  Blank Page
+				li
+					a.treeview-item(href='page-login.html')
+						i.icon.fa.fa-circle-o
+						|  Login Page
+				li
+					a.treeview-item(href='page-lockscreen.html')
+						i.icon.fa.fa-circle-o
+						|  Lockscreen Page
+				li
+					a.treeview-item(href='page-user.html' class={'active': activePage == 'user-page'})
+						i.icon.fa.fa-circle-o
+						|  User Page
+				li
+					a.treeview-item(href='page-invoice.html' class={'active': activePage == 'invoice-page'})
+						i.icon.fa.fa-circle-o
+						|  Invoice Page
+				li
+					a.treeview-item(href='page-calendar.html' class={'active': activePage == 'calendar-page'})
+						i.icon.fa.fa-circle-o
+						|  Calendar Page
+				li
+					a.treeview-item(href='page-mailbox.html' class={'active': activePage == 'mailbox-page'})
+						i.icon.fa.fa-circle-o
+						|  Mailbox
+				li
+					a.treeview-item(href='page-error.html' class={'active': activePage == 'error-page'})
+						i.icon.fa.fa-circle-o
+						|  Error Page
+

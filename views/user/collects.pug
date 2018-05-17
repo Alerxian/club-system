@@ -1,0 +1,12 @@
+extends ./home_base
+
+block panel
+  .panel
+    .panel-hd <span class="ico-reply"></span> #{user.username} 收藏的话题
+    .panel-bd.list-bd
+      ul.list.list-striped
+        if collects.length
+          +collect_list(collects)
+        else 
+          li.more 还没有收藏过的帖子
+      include ../includes/page 

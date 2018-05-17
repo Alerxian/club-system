@@ -7,49 +7,30 @@ const crypto = require('crypto');
 const config = require('../config');
 const path = require('path');
 const url = require('url');
+const ObjectId = mongoose.Schema.ObjectId;
+const page = require('../common/page');
 
 let UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  home: {
-    type: String
-  }, //个人主页
-  github: 　{
-    type: String
-  },
-  avatar: {
-    type: String
-  },
-  score: {
-    type: Number,
-    default: 0
-  },
-  signature: {
-    type: String,
-    default: "个性签名"
-  },
-  topic_count: {
-    type: Number,
-    default: 0
-  },
-  reply_count: {
-    type: Number,
-    default: 0
-  },
-  create_time: {
-    type: Date,
-    default: Date.now
-  }
+  username: {type: String,required: true},
+  password: {type: String, required: true },
+  email: {type: String, required: true },
+  role: {type: Number, default: 1},
+  // 用户等级 1: 普通用户
+  // 100 后台管理员
+  follow_people: [{type: ObjectId, ref: 'User'}],
+  follow_people_count: {type: Number, default: 0},
+  follow_topic: [{type: ObjectId, ref: 'User'}],
+  follow_topic_count: {type: Number, defualt: 0},
+  home: {type: String}, //个人主页
+  github: { type: String },
+  avatar: {  type: String },
+  score: {  type: Number,  default: 0 },
+  signature: {  type: String,   default: "个性签名" },
+  topic_count: {   type: Number,  default: 0},
+  reply_count: {  type: Number,  default: 0 },
+  create_time: { type: Date,  default: Date.now },
+  //访问令牌
+  access_token: {type: String},
 });
 
 //设置Schema初始化的参数
@@ -104,6 +85,12 @@ UserSchema.statics.updateTopicCount = async function (userId, num) {
   user.save();
   return user;
 }
+
+
+/**
+ * 根据分页获取用户
+ */
+page.addFindPageForQuery(UserSchema, 'getUserForPage');
 
 UserSchema.statics.updateReplyCount = async function (userId, num) {
   let user = await this.findOneQ({

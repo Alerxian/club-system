@@ -1,0 +1,180 @@
+extends layouts/_layout.pug
+
+block variables
+  - var activePage = 'sys-role'
+  - var activeGroup = 'sys-users'
+
+block content
+  .app-title
+    div
+      h1
+        i.fa.fa-users
+        |  权限管理页
+    ul.app-breadcrumb.breadcrumb
+      li.breadcrumb-item
+        i.fa.fa-home.fa-lg
+      li.breadcrumb-item 系统管理
+      li.breadcrumb-item
+        a(href="/admin/comment") 权限管理
+  .row
+    .col-md-12
+      .tile
+        .tile-body
+          div.add_user
+            i.fa.fa-plus-square-o.lg
+            span 添加管理员
+          table.table.table-hover.table-bordered#table_user
+            thead
+              tr
+                td
+                    div.checkbox
+                      label.form-check-label: input(type="checkbox")
+                th 用户名
+                th 用户权限
+                th 是否有效
+                th 操作
+            tbody
+              - if(users.length)
+                each user in users
+                  tr
+                    td
+                      div.checkbox
+                        label.form-check-label: input(type="checkbox") 
+                    td= user.username 
+                    td= user.role === 100 ? '超级管理员' : '普通用户'
+                    td  
+                      - if(user.isAdmin) 
+                        i.fa.fa-check-circle(style="color:rgb(19, 206, 102);")
+                      -else 
+                        i.fa.fa-check-circle
+                    td 
+                      .ico-click(style="font-size:16px;") 
+                        span.span_round: i.ico-trash.ico_red
+              -else
+                div.text-muted.align 暂无数据
+  .bs-component(style="font-size:16px;")
+    .modal.fade#myModal( tabindex="-1" role="dialog" aria-labelledby="modalLabel")(style="max-height:400px;overflow-y:auto;")
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5.modal-title 添加管理员
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            form#form_info.form-horizontal(action="/admin/admin_user/add" method="post")
+              .form-group.row
+                label.control-label.col-md-3 用户名
+                .col-md-8
+                  input.form-control(type="text", name="username", id="username",  value="" placeholder="请输入用户名：")
+              .form-group.row
+                label.control-label.col-md-3 密码
+                .col-md-8
+                   input.form-control(type="password", name="password", id="password",  value="" placeholder="请输入密码：")
+              .form-group.row
+                label.control-label.col-md-3 邮箱
+                .col-md-8
+                  input.form-control(type="email", name='email', id="email", value="" placeholder="输入您的邮箱：")          
+          .modal-footer
+            input.btn.btn-primary#modifyUser(type='button' value="添加") 
+            input.btn.btn-danger(type='button', data-dismiss='modal' value="关闭") 
+  nav#user_page
+    .page_title= '共有'+count+'条数据'
+    ul.pagination(style="width:300px;margin:0 auto;")
+      li.page-link: a(href=page.start < page.current ? `?page=${page.current - 1}` : 'javascript:;') 上一页
+      - for (var i = page.start; i <= page.end; i++)
+          - if (page.current == i)
+            li.page-link: span= i
+          - else
+            li.page-link: a(href=`?page=${i}`)= i
+      li.page-link: a(href= page.end > page.current ? `?page=${page.current + 1}` : 'javascript:;') 下一页
+block specific-js
+  //- script(type='text/javascript', src="/public/javascripts/plugins/jquery.dataTables.min.js")
+  //- script(type='text/javascript', src="/public/javascripts/plugins/dataTables.bootstrap.min.js")
+  //- script(type='text/javascript', src="/public/javascripts/select2.min.js")
+  script(type='text/javascript').
+    //- $('#demoSelect').select2();
+    $('.add_user i').click(function(e) {
+      e.preventDefault();
+      $('#myModal').find('#username').val();
+      $('#email').val();
+      $('#myModal').modal();
+      $('#modifyUser').click(function(e) {
+        get_modify(e)
+      });
+    });
+    $('#table_user').on('click', function(e) {
+      var target = e.target;
+      var curRow;
+      if(target.tagName.toLowerCase() == 'table'){
+          return;
+      }
+      while(target.tagName.toLowerCase() !== 'tr') {
+        curRow = target.parentElement;
+        target = curRow;
+      }
+
+      var select_tr = $('#table_user  tr')[+curRow.rowIndex];
+      var username = $(select_tr).children('td').eq(1).text();
+      var email = $(select_tr).children('td').eq(3).text();
+      var signature = $(select_tr).children('td').eq(4).text();
+      target = e.originalEvent.target;
+      console.log(target);
+      if(target.className == 'span_round') {
+        target = target.children[0];
+      }
+      //编辑
+      if(target.className == 'ico-edit ico_blue'){
+        //获取数据
+        $('#myModal').find('#username').val(username);
+        $('#email').val(email);
+        $('#signature').val(signature);
+        $('#myModal').modal();
+        $('#modifyUser').click(function(e) {
+          get_modify(e, select_tr);
+        });
+      }
+      if(target.className == 'ico-trash ico_red') {
+        //删除数据
+        if (!confirm('您确定要删除该用户吗?')){
+          return false;
+        }
+        $.get(`/admin/user/delete?username=${username}`, function(result){
+          console.log(result);
+          if(result.success) {
+            location.href = '/admin/user';
+          }else if(result.error) {
+            console.log(result.error);
+          }
+        });
+      }
+    });
+
+    function get_modify(e,elem) {
+      var username = $('#username').val();
+      var email = $('#email').val();
+      var password = $('#password').val();
+      if (!confirm('您确定要添加为超级管理员吗?')){
+          return false;
+        }
+      //- var signature = $('#signature').val();
+      $.ajax({
+        type:'POST',
+        url: $('#form_info').attr('action'),
+        dataType: 'json',
+        data: {
+          username: username,
+          email: email,
+          password: password
+        },
+        complete: function() {
+          $('#myModal').modal('hide');
+        },
+        success: function(data) {
+          if(typeof(data) == "string") {
+            console.log(data)
+          }else {
+            location.href = '/admin/role'
+          }
+        }
+      });
+    }

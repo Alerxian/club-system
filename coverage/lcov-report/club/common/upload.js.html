@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for club\common\upload.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">club/common/</a> upload.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.73% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>7/51</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/17</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.73% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>7/51</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * 接受上传数据
+ */
+&nbsp;
+const Busboy = require('busboy');
+const config = require('../config');
+const storage = require('./storage');
+const path = require('path');
+&nbsp;
+&nbsp;
+module.exports = <span class="fstat-no" title="function not covered" >function (req, options, field) {</span>
+<span class="cstat-no" title="statement not covered" >  if (arguments.length &lt; 2) {</span>
+<span class="cstat-no" title="statement not covered" >    throw new Error('upload 参数最少为2个!');</span>
+  }
+<span class="cstat-no" title="statement not covered" >  if (typeof options === 'string') {</span>
+<span class="cstat-no" title="statement not covered" >    field = options;</span>
+<span class="cstat-no" title="statement not covered" >    options = {};</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  options.headers = req.headers;</span>
+<span class="cstat-no" title="statement not covered" >  options.limits = {</span>
+    fileSize: config.fileSize
+  }
+<span class="cstat-no" title="statement not covered" >  const busboy = new Busboy(options);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return new Promise((resolve, reject) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    let isLoaded = false;</span>
+<span class="cstat-no" title="statement not covered" >    let isSaveed = false;</span>
+<span class="cstat-no" title="statement not covered" >    let isError = false;</span>
+<span class="cstat-no" title="statement not covered" >    let isDiscard = false;</span>
+<span class="cstat-no" title="statement not covered" >    let file = null;</span>
+<span class="cstat-no" title="statement not covered" >    busboy.on('finish', () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      isLoaded = true;</span>
+<span class="cstat-no" title="statement not covered" >      done();</span>
+    })
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    busboy.on('file', (fieldname, fileStream, filename, encoding, mimetype) =&gt; {</span>
+      // 过滤文件格式
+<span class="cstat-no" title="statement not covered" >      if (!/^image\/*/.test(mimetype)) {</span>
+<span class="cstat-no" title="statement not covered" >        isError = false;</span>
+<span class="cstat-no" title="statement not covered" >        reject(new Error('您上传的文件格式不正确,请重试'))</span>
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+      }
+      // 检测上传文件字段是否正确
+<span class="cstat-no" title="statement not covered" >      if (field !== fieldname) {</span>
+<span class="cstat-no" title="statement not covered" >        isDiscard = true;</span>
+<span class="cstat-no" title="statement not covered" >        fileStream.resume();</span>
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      fileStream.on('limit', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        isError = true;</span>
+<span class="cstat-no" title="statement not covered" >        reject(new Error('您添加的文件过大,请检查后重试!'));</span>
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      storage.upload(fileStream, {</span>
+        key: getFilename(fieldname, filename)
+      }, (err, result) =&gt; {
+<span class="cstat-no" title="statement not covered" >        if (err) {</span>
+<span class="cstat-no" title="statement not covered" >          isError = true;</span>
+<span class="cstat-no" title="statement not covered" >          return reject(err);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (isError) {</span>
+          // 删除已上传到的文件
+<span class="cstat-no" title="statement not covered" >          storage.delete(result.key, () =&gt; {});</span>
+<span class="cstat-no" title="statement not covered" >          return false;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        file = {</span>
+          fieldname: fieldname,
+          encoding: encoding,
+          mimetype: mimetype,
+          filename: result.key,
+          url: result.url
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        isSaveed = true;</span>
+<span class="cstat-no" title="statement not covered" >        done();</span>
+      });
+    })
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    req.pipe(busboy);</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function done() {</span>
+<span class="cstat-no" title="statement not covered" >      if (isLoaded &amp;&amp; (isSaveed || isDiscard)) {</span>
+<span class="cstat-no" title="statement not covered" >        resolve(file);</span>
+      }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getFilename(fieldname, filename) {</span>
+<span class="cstat-no" title="statement not covered" >      let extname = path.extname(filename);</span>
+<span class="cstat-no" title="statement not covered" >      return fieldname + '-' + Date.now() + extname;</span>
+    }
+&nbsp;
+  })
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 29 2018 17:20:39 GMT+0800 (中国标准时间)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

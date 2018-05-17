@@ -9,7 +9,7 @@ const Topic = model('topic');
 const User = model('user');
 const Reply = model('reply');
 
-var request = exports.request = supertest.agent(app.listen(3000));
+var request = exports.request = supertest.agent(app.listen(4000));
 
 /**
  * 发送ajax请求

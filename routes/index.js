@@ -5,6 +5,10 @@ const Page = require('../common/page');
 const sign = require('../middlewares/sign');
 const upload = require('../common/upload');
 const getData = require('../models/zhihu');
+const markdown = require('markdown-it');
+let md = new markdown({
+    html: true
+  });
 // 获取首页内容
 router.get('/', async (ctx, next) => {
 
@@ -44,23 +48,30 @@ router.get('/', async (ctx, next) => {
   ]);
 
   let topics = result.data;
-
   //  读取发帖及回帖用户信息
   topics = await Promise.all(topics.map(async (topic) => {
     topic.author = await User.findById(topic.author_id, 'username avatar');
     if (topic.last_reply) {
       topic.reply = await Reply.findById(topic.last_reply, 'author_id');
-      topic.reply.author = await User.findById(topic.reply.author_id, 'username');
+      if(topic.reply){
+        topic.reply.author = await User.findById(topic.reply.author_id, 'username');
+      }
     }
     return topic;
   }));
+  let topic_none = topics.filter( async function(topic){
+    topic.is_reply = await Reply.findById(topic._id);
+    return topic.reply || topic.is_reply
+  });
   await ctx.render('index', {
     title: '首页',
     topics: topics,
     tags: config.tags,
     scoreRank: scoreRank,
     current_tag: current_tag,
-    page: result.page
+    page: result.page,
+    md:md,
+    topic_none: topic_none.slice(0,5)
   });
 });
 
